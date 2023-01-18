@@ -7,7 +7,10 @@ const Home: React.FC = (props: any) => {
     <View>
       <StatusBar backgroundColor="transparent" translucent={true} />
       <Text>主页</Text>
-      <Button title="Go to Login" onPress={() => navigation.push('Login')} />
+      <Button
+        title="Go to Login"
+        onPress={() => navigation.push('NewCustomer')}
+      />
     </View>
   );
 };

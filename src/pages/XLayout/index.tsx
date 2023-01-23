@@ -1,7 +1,8 @@
 import {View, Text, Button, StatusBar} from 'react-native';
 import React, {useEffect} from 'react';
+import {observer} from 'mobx-react';
 
-const Home: React.FC = (props: any) => {
+const XLayout: React.FC = (props: any) => {
   const {navigation} = props;
   return (
     <View>
@@ -15,4 +16,4 @@ const Home: React.FC = (props: any) => {
   );
 };
 
-export default Home;
+export default observer(XLayout);

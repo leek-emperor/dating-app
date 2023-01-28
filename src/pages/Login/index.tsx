@@ -14,6 +14,7 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import {observer} from 'mobx-react';
 
 const CELL_COUNT = 6;
 
@@ -113,7 +114,7 @@ const Login: React.FC = (prop: any) => {
               if (res.data.newCustomer) {
                 navigation.navigate('NewCustomer');
               } else {
-                navigation.navigate('Home');
+                navigation.navigate('XLayout');
               }
             }
           })
@@ -236,4 +237,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default Login;
+export default observer(Login);

@@ -7,6 +7,9 @@ import Friend from '../Friend';
 import Message from '../Message';
 import Group from '../Group';
 import makeIcon, {activeColor, defaultColor} from './IconMap';
+import {StatusBar} from 'react-native';
+import {pinkType} from '@/utils/color.const';
+import {pxToDp} from '@/utils/styles.const';
 
 const renderScene = SceneMap({
   Friend,
@@ -40,33 +43,49 @@ function XLayout() {
 
   const renderTabBar = (props: any) => {
     return (
-      <TabBar
-        renderIcon={({route, focused, color}) => {
-          return makeIcon(route.key, focused, color);
-        }}
-        indicatorStyle={{backgroundColor: 'white'}}
-        renderLabel={({route, focused, color}) => (
-          <Text style={{color: focused ? activeColor : defaultColor}}>
-            {route.title}
-          </Text>
-        )}
-        style={{backgroundColor: '#fff'}}
-        {...props}
-      />
+      <>
+        {/* <StatusBar
+          backgroundColor="transparent"
+          translucent={false}
+          // hidden={true}
+          barStyle={'dark-content'}
+        /> */}
+        <TabBar
+          renderIcon={({route, focused, color}) => {
+            return makeIcon(route.key, focused, color);
+          }}
+          indicatorStyle={{backgroundColor: 'white'}}
+          renderLabel={({route, focused, color}) => (
+            <Text style={{color: focused ? activeColor : defaultColor}}>
+              {route.title}
+            </Text>
+          )}
+          style={{backgroundColor: '#fff'}}
+          {...props}
+        />
+      </>
     );
   };
 
   return (
-    <TabView
-      style={{flex: 1}}
-      lazy
-      navigationState={{index, routes}}
-      renderTabBar={renderTabBar}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{width: layout.width}}
-      tabBarPosition="bottom"
-    />
+    <>
+      <StatusBar
+        backgroundColor="transparent"
+        translucent={true}
+        // hidden={true}
+        barStyle={'dark-content'}
+      />
+      <TabView
+        style={{flex: 1}}
+        lazy
+        navigationState={{index, routes}}
+        renderTabBar={renderTabBar}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{width: layout.width}}
+        tabBarPosition="bottom"
+      />
+    </>
   );
 }
 

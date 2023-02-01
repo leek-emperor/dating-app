@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useAppContext} from '@/store/index.context';
 import {observer} from 'mobx-react';
 import {pxToDp} from '@/utils/styles.const';
@@ -29,7 +29,11 @@ const NewCustomer: React.FC = (props: any) => {
   // console.log(object)
   const {setInfo, userInfo} = userStore;
   const [message, setMessage] = useState(userInfo);
-  const [postion, setPosition] = useState([]);
+  const [postion, setPosition] = useState([
+    {id: '110000', name: '北京市', value: '北京市'},
+    {id: '110101', name: '东城区', value: '东城区'},
+    {},
+  ]);
   const [visible, setVisible] = useState<boolean>(false);
   // const [showModal,set]
   async function geoinit() {
@@ -39,6 +43,10 @@ const NewCustomer: React.FC = (props: any) => {
   useEffect(() => {
     // geoinit();
   }, []);
+
+  const location = useMemo(() => {
+    return postion.map((val: any) => val?.name).join('，');
+  }, [postion]);
   return (
     <View style={Styles.body}>
       <StatusBar backgroundColor="transparent" translucent={true} />
@@ -105,15 +113,6 @@ const NewCustomer: React.FC = (props: any) => {
           </List.Item>
         </DatePicker>
       </List>
-      {/* <List>
-        <InputItem
-          clear
-          value={message.userName}
-          onFocus={() => setVisible(true)}>
-          所在地
-        </InputItem>
-      </List> */}
-
       <Button
         style={{
           borderWidth: 0,
@@ -121,24 +120,28 @@ const NewCustomer: React.FC = (props: any) => {
           justifyContent: 'flex-start',
         }}
         onPress={() => setVisible(true)}>
-        <Text style={{fontSize: 16, color: 'black'}}>
-          所在地 <Text style={{marginLeft: pxToDp(100)}}>{'12312'}</Text>
+        <Text style={{fontSize: 18, color: 'black'}}>
+          所在地{'      '}
+          <Text style={{color: '#ccc'}}>{location}</Text>
         </Text>
       </Button>
 
-      <Modal
-        popup
-        visible={visible}
-        animationType="slide-up"
-        // onClose={this.onClose2}
-      >
+      <Modal popup visible={visible} animationType="slide-up">
         <View style={{paddingVertical: 20, paddingHorizontal: 20}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Button type="primary" onPress={() => setVisible(false)}>
-              取消
+            <Button
+              type="primary"
+              style={Styles.modalBtn}
+              activeStyle={Styles.modalActiveStyle}
+              onPress={() => setVisible(false)}>
+              <Text style={Styles.modalBtnText}>取消</Text>
             </Button>
-            <Button type="primary" onPress={() => setVisible(false)}>
-              确定
+            <Button
+              type="primary"
+              activeStyle={Styles.modalActiveStyle}
+              style={Styles.modalBtn}
+              onPress={() => setVisible(false)}>
+              <Text style={Styles.modalBtnText}>确定</Text>
             </Button>
           </View>
           <CascadePicker
@@ -153,11 +156,11 @@ const NewCustomer: React.FC = (props: any) => {
             dataSource={options}
             value={postion}
             onceChange={arr => {
-              console.log(arr);
+              // console.log(arr);
               setPosition(arr);
             }}
-            // cancel={this.cancel}
-            // confirm={this.confirm}
+            cancel={() => Promise.resolve()}
+            confirm={() => Promise.resolve()}
           />
         </View>
       </Modal>
@@ -224,6 +227,13 @@ const Styles = StyleSheet.create({
   cancelStyle: {
     display: 'none',
   },
+  modalBtn: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    // color: 'skyblue',
+  },
+  modalBtnText: {color: 'skyblue', fontSize: pxToDp(18)},
+  modalActiveStyle: {backgroundColor: '#ccc', opacity: 0.4},
 });
 
 export default observer(NewCustomer);

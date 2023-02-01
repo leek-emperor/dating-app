@@ -35,13 +35,6 @@ class userStore implements UserStore {
   setInfo = (newInfo: UserInfo) => {
     this.userInfo = newInfo;
   };
-
-  // get token() {
-  //   getStoreData('token').then((res: any) => {
-  //     console.log(res);
-  //   });
-  //   return getStoreData('token');
-  // }
 }
 
 export default new userStore();

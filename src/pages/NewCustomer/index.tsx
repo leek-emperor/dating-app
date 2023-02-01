@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   View,
   Text,
@@ -5,18 +6,39 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAppContext} from '@/store/index.context';
 import {observer} from 'mobx-react';
 import {pxToDp} from '@/utils/styles.const';
-import {InputItem, DatePicker, List} from '@ant-design/react-native';
+import {
+  InputItem,
+  DatePicker,
+  List,
+  Modal,
+  Button,
+} from '@ant-design/react-native';
+import options from '@/utils/city';
+import Geo from '@/utils/Geo';
+import {CascadePicker} from 'react-native-slidepicker';
 
 const NewCustomer: React.FC = (props: any) => {
   const {navigation} = props;
   const {userStore} = useAppContext();
+  // console.log(object)
   const {setInfo, userInfo} = userStore;
-  const [message, setMessage] = useState<any>(userInfo);
+  const [message, setMessage] = useState(userInfo);
+  const [postion, setPosition] = useState([]);
+  const [visible, setVisible] = useState<boolean>(false);
+  // const [showModal,set]
+  async function geoinit() {
+    const res = await Geo.getCityByLocation();
+    console.log(res);
+  }
+  useEffect(() => {
+    // geoinit();
+  }, []);
   return (
     <View style={Styles.body}>
       <StatusBar backgroundColor="transparent" translucent={true} />
@@ -65,7 +87,10 @@ const NewCustomer: React.FC = (props: any) => {
       </List>
       <List>
         <DatePicker
-          style={{flexDirection: 'row', justifyContent: 'flex-start'}}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+          }}
           value={message.birthday}
           mode="date"
           defaultDate={new Date()}
@@ -75,18 +100,83 @@ const NewCustomer: React.FC = (props: any) => {
             setMessage((message: any) => ({...message, birthday: value}));
           }}
           format="YYYY-MM-DD">
-          <List.Item
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              backgroundColor: 'pink',
-            }}
-            align="bottom"
-            arrow="horizontal">
+          <List.Item align="bottom" arrow="horizontal">
             生日
           </List.Item>
         </DatePicker>
       </List>
+      {/* <List>
+        <InputItem
+          clear
+          value={message.userName}
+          onFocus={() => setVisible(true)}>
+          所在地
+        </InputItem>
+      </List> */}
+
+      <Button
+        style={{
+          borderWidth: 0,
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+        }}
+        onPress={() => setVisible(true)}>
+        <Text style={{fontSize: 16, color: 'black'}}>
+          所在地 <Text style={{marginLeft: pxToDp(100)}}>{'12312'}</Text>
+        </Text>
+      </Button>
+
+      <Modal
+        popup
+        visible={visible}
+        animationType="slide-up"
+        // onClose={this.onClose2}
+      >
+        <View style={{paddingVertical: 20, paddingHorizontal: 20}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Button type="primary" onPress={() => setVisible(false)}>
+              取消
+            </Button>
+            <Button type="primary" onPress={() => setVisible(false)}>
+              确定
+            </Button>
+          </View>
+          <CascadePicker
+            headOptions={{
+              confirmStyle: Styles.confirmStyle,
+              cancelStyle: Styles.cancelStyle,
+              backgroundColor: 'transparent',
+            }}
+            pickerStyle={{
+              normalBgOpacity: 0,
+            }}
+            dataSource={options}
+            value={postion}
+            onceChange={arr => {
+              console.log(arr);
+              setPosition(arr);
+            }}
+            // cancel={this.cancel}
+            // confirm={this.confirm}
+          />
+        </View>
+      </Modal>
+      {/* <Modal
+        style={{
+          width: '100%', //Dimensions.get('window').width,
+          borderRadius: 50,
+          position: 'absolute',
+          right: 0,
+          top: 300,
+          backgroundColor: '#fff',
+          opacity: 0.6,
+        }}
+        transparent={false}
+        visible={true}
+        animationType="slide-up"
+        onClose={() => setVisible(false)}>
+        
+      </Modal> */}
     </View>
   );
 };
@@ -117,6 +207,22 @@ const Styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 2,
     borderColor: '#6699FF',
+  },
+  modal: {
+    // backgroundColor: 'white',
+    borderColor: 'blue',
+    borderWidth: 10,
+    borderStyle: 'solid',
+    width: Dimensions.get('window').width,
+    height: '35%',
+    position: 'absolute',
+    top: 0,
+  },
+  confirmStyle: {
+    display: 'none',
+  },
+  cancelStyle: {
+    display: 'none',
   },
 });
 

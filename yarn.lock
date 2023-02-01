@@ -6203,6 +6203,11 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.npmmirror.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-native-amap-geolocation@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npmmirror.com/react-native-amap-geolocation/-/react-native-amap-geolocation-1.2.0.tgz#d5c24f93122e562a2f122e4db846a4ceeda4e2e0"
+  integrity sha512-D0XDmB4zR9mi+JBjcVyktzQsT/542JeEfL4lpMPn4DG4ZMbU43J3Ht6zzB54hkIhArqNZSvnGUvexvnOA25d7w==
+
 react-native-codegen@^0.0.7:
   version "0.0.7"
   resolved "https://registry.npmmirror.com/react-native-codegen/-/react-native-codegen-0.0.7.tgz#86651c5c5fec67a8077ef7f4e36f7ed459043e14"
@@ -6290,6 +6295,11 @@ react-native-size-matters@^0.4.0:
   version "0.4.0"
   resolved "https://registry.npmmirror.com/react-native-size-matters/-/react-native-size-matters-0.4.0.tgz#01bfd0d59454318f4e0b13fe9c1eb0523d70f2e0"
   integrity sha512-8/C0htHrFWeUm9N8JegmadovUfgTWkGBkDPZ1N3YkXtDWb+98Ya2gThiKcu445r8c7YhcrBfnHz/mYsXIusaOQ==
+
+react-native-slidepicker@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npmmirror.com/react-native-slidepicker/-/react-native-slidepicker-1.2.0.tgz#e9bfbb89ecbe2cab7a3bec021f28e24ff5dffaf8"
+  integrity sha512-5P86ZPkG0rbaj1Ec6jyiuX9pYuYSmx4uNd5NxKzn6J/zv0q4Lp5j7Arnc39HAn5f//xAqycX7HeDHvgGvHqVag==
 
 react-native-tab-view@^3.3.4:
   version "3.3.4"

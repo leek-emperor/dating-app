@@ -45,28 +45,32 @@ const NewCustomer: React.FC = (props: any) => {
     const res = await Geo.getCityByLocation();
     console.log(res);
   }
-  async function requestCameraPermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: '需要访问相册',
-          message: '需要访问相册',
-          buttonPositive: '',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        setGranted(true);
-        return Promise.resolve(true);
-      } else {
+
+  useEffect(() => {
+    async function requestCameraPermission() {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            title: '需要访问相册',
+            message: '需要访问相册',
+            buttonPositive: '',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          setGranted(true);
+          return Promise.resolve(true);
+        } else {
+          return Promise.resolve(false);
+        }
+      } catch (err) {
+        console.warn(err);
         return Promise.resolve(false);
       }
-    } catch (err) {
-      console.warn(err);
-      return Promise.resolve(false);
     }
-  }
-  useEffect(() => {
+    function handleClickAvatar() {
+      requestCameraPermission().then((res: any) => console.log(res));
+    }
     // geoinit();
     requestCameraPermission().then(res => console.log(res));
   }, []);
@@ -74,10 +78,6 @@ const NewCustomer: React.FC = (props: any) => {
   const location = useMemo(() => {
     return postion.map((val: any) => val?.name).join('，');
   }, [postion]);
-
-  function handleClickAvatar() {
-    requestCameraPermission().then((res: any) => console.log(res));
-  }
 
   // 点击选择头像的事件
   const onClickChoosePicture = () => {

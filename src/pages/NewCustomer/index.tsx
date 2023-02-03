@@ -193,7 +193,6 @@ const NewCustomer: React.FC = (props: any) => {
           <Text style={{color: '#ccc'}}>{location}</Text>
         </Text>
       </Button>
-
       <View style={{alignItems: 'center'}}>
         <XButton
           text="确定"

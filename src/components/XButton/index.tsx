@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -20,7 +21,9 @@ const XButton = (props: Props) => {
   const {disable = false, text, onPress, style = {}} = props;
 
   const _onPress = () => {
-    if (isFunction(onPress)) onPress();
+    if (isFunction(onPress)) {
+      onPress();
+    }
   };
 
   return (

@@ -164,22 +164,6 @@ const NewCustomer: React.FC = (props: any) => {
           />
         </View>
       </Modal>
-      {/* <Modal
-        style={{
-          width: '100%', //Dimensions.get('window').width,
-          borderRadius: 50,
-          position: 'absolute',
-          right: 0,
-          top: 300,
-          backgroundColor: '#fff',
-          opacity: 0.6,
-        }}
-        transparent={false}
-        visible={true}
-        animationType="slide-up"
-        onClose={() => setVisible(false)}>
-        
-      </Modal> */}
     </View>
   );
 };

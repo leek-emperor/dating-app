@@ -6,12 +6,12 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Dimensions,
+  PermissionsAndroid,
 } from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {useAppContext} from '@/store/index.context';
 import {observer} from 'mobx-react';
-import {pxToDp} from '@/utils/styles.const';
+import {pxToDp, screenWidth} from '@/utils/styles.const';
 import {
   InputItem,
   DatePicker,
@@ -22,6 +22,9 @@ import {
 import options from '@/utils/city';
 import Geo from '@/utils/Geo';
 import {CascadePicker} from 'react-native-slidepicker';
+import ImagePicker from 'react-native-syan-image-picker';
+import XButton from '@/components/XButton';
+// import {showImagePick}
 
 const NewCustomer: React.FC = (props: any) => {
   const {navigation} = props;
@@ -35,23 +38,88 @@ const NewCustomer: React.FC = (props: any) => {
     {},
   ]);
   const [visible, setVisible] = useState<boolean>(false);
+  const [granted, setGranted] = useState<boolean>(false);
+  const [avatar, setAvatar] = useState<string>('');
   // const [showModal,set]
   async function geoinit() {
     const res = await Geo.getCityByLocation();
     console.log(res);
   }
+  async function requestCameraPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: '需要访问相册',
+          message: '需要访问相册',
+          buttonPositive: '',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        setGranted(true);
+        return Promise.resolve(true);
+      } else {
+        return Promise.resolve(false);
+      }
+    } catch (err) {
+      console.warn(err);
+      return Promise.resolve(false);
+    }
+  }
   useEffect(() => {
     // geoinit();
+    requestCameraPermission().then(res => console.log(res));
   }, []);
 
   const location = useMemo(() => {
     return postion.map((val: any) => val?.name).join('，');
   }, [postion]);
+
+  function handleClickAvatar() {
+    requestCameraPermission().then((res: any) => console.log(res));
+  }
+
+  // 点击选择头像的事件
+  const onClickChoosePicture = () => {
+    const options = {
+      imageCount: 1, // 最大选择图片数目，默认6
+      isCamera: true, // 是否允许用户在内部拍照，默认true
+      isCrop: true, // 是否允许裁剪，默认false
+      enableBase64: true,
+      rotateEnabled: false,
+    };
+    let photoData = null;
+    ImagePicker.showImagePicker(options, (err, selectedPhotos) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      setAvatar(selectedPhotos[0]?.base64);
+    });
+  };
+
+  function onSubmit() {}
+
   return (
     <View style={Styles.body}>
       <StatusBar backgroundColor="transparent" translucent={true} />
       <Text style={Styles.title}>填写资料</Text>
       <Text style={Styles.title}>提升我的魅力</Text>
+      <View style={{alignItems: 'center', marginTop: pxToDp(20)}}>
+        <TouchableOpacity
+          style={Styles.avatarContain}
+          onPress={onClickChoosePicture}>
+          {avatar === '' ? (
+            <View style={Styles.setAvatar}>
+              <Text style={{fontSize: pxToDp(17), textAlign: 'center'}}>
+                设置头像
+              </Text>
+            </View>
+          ) : (
+            <Image style={Styles.avatar} source={{uri: avatar}} />
+          )}
+        </TouchableOpacity>
+      </View>
       <View style={Styles.gender}>
         <TouchableOpacity
           style={{marginRight: pxToDp(40)}}
@@ -125,6 +193,14 @@ const NewCustomer: React.FC = (props: any) => {
           <Text style={{color: '#ccc'}}>{location}</Text>
         </Text>
       </Button>
+
+      <View style={{alignItems: 'center'}}>
+        <XButton
+          text="确定"
+          style={{btnStyle: Styles.makeSure}}
+          onPress={onSubmit}
+        />
+      </View>
 
       <Modal popup visible={visible} animationType="slide-up">
         <View style={{paddingVertical: 20, paddingHorizontal: 20}}>
@@ -200,7 +276,7 @@ const Styles = StyleSheet.create({
     borderColor: 'blue',
     borderWidth: 10,
     borderStyle: 'solid',
-    width: Dimensions.get('window').width,
+    width: screenWidth,
     height: '35%',
     position: 'absolute',
     top: 0,
@@ -218,6 +294,45 @@ const Styles = StyleSheet.create({
   },
   modalBtnText: {color: 'skyblue', fontSize: pxToDp(18)},
   modalActiveStyle: {backgroundColor: '#ccc', opacity: 0.4},
+  avatarContain: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    width: screenWidth / 3,
+    height: screenWidth / 3,
+    // padding: pxToDp(10),
+    // backgroundColor: 'pink',
+    borderWidth: pxToDp(1),
+    borderColor: 'transparent',
+    borderRadius: pxToDp(100),
+  },
+  avatar: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+    borderWidth: pxToDp(1),
+    borderColor: 'transparent',
+    borderRadius: pxToDp(100),
+  },
+  setAvatar: {
+    backgroundColor: '#ccc',
+    opacity: 0.3,
+    width: '100%',
+    height: '100%',
+    // height: pxToDp(50),
+    justifyContent: 'center',
+    borderWidth: pxToDp(1),
+    borderColor: 'transparent',
+    borderRadius: pxToDp(100),
+  },
+  makeSure: {
+    marginTop: pxToDp(20),
+    width: '70%',
+    height: pxToDp(50),
+    borderRadius: pxToDp(30),
+    borderWidth: 1,
+    borderColor: 'transparent',
+    backgroundColor: 'pink',
+  },
 });
 
 export default observer(NewCustomer);

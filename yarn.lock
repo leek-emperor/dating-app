@@ -6301,6 +6301,11 @@ react-native-slidepicker@^1.2.0:
   resolved "https://registry.npmmirror.com/react-native-slidepicker/-/react-native-slidepicker-1.2.0.tgz#e9bfbb89ecbe2cab7a3bec021f28e24ff5dffaf8"
   integrity sha512-5P86ZPkG0rbaj1Ec6jyiuX9pYuYSmx4uNd5NxKzn6J/zv0q4Lp5j7Arnc39HAn5f//xAqycX7HeDHvgGvHqVag==
 
+react-native-syan-image-picker@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.npmmirror.com/react-native-syan-image-picker/-/react-native-syan-image-picker-0.5.3.tgz#4d1f164449abac11f60cde337ad1ac22ef554b19"
+  integrity sha512-jDHKiv6jPrC3Dslhq2tDjqYC27HE0sNRzpthOY1//THgQpJ0Ht7B6EHvllWVaMw0V41kFVMixLxVQTMu/V7RSw==
+
 react-native-tab-view@^3.3.4:
   version "3.3.4"
   resolved "https://registry.npmmirror.com/react-native-tab-view/-/react-native-tab-view-3.3.4.tgz#856d4527f3bbf05e2649302ec80abe9f2f004666"

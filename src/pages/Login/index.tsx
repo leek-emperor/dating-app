@@ -114,9 +114,9 @@ const Login: React.FC = (prop: any) => {
             if (res.status === 0) {
               AsyncStorage.setItem('token', res.data.token);
               if (res.data.newCustomer) {
-                navigation.navigate('NewCustomer');
+                navigation.replace('NewCustomer');
               } else {
-                navigation.navigate('XLayout');
+                navigation.replace('XLayout');
               }
             }
           })

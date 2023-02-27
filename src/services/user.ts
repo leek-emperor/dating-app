@@ -12,3 +12,8 @@ export const loginVerification = (
 ): Promise<CommonAxiosReponse> => {
   return $axios.post('/user/loginVerification', {phone, verifyCode});
 };
+
+// setUserInfo
+export const setUserInfo = (newInfo: object): Promise<CommonAxiosReponse> => {
+  return $axios.post('/setInfo/setUserInfo', newInfo);
+};

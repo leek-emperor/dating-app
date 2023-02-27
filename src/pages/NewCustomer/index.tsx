@@ -24,23 +24,20 @@ import Geo from '@/utils/Geo';
 import {CascadePicker} from 'react-native-slidepicker';
 import ImagePicker from 'react-native-syan-image-picker';
 import XButton from '@/components/XButton';
-// import {showImagePick}
+import {Toast} from '@ant-design/react-native';
+import moment from 'moment';
 
 const NewCustomer: React.FC = (props: any) => {
   const {navigation} = props;
   const {userStore} = useAppContext();
-  // console.log(object)
-  const {setInfo, userInfo} = userStore;
-  const [message, setMessage] = useState(userInfo);
-  const [postion, setPosition] = useState([
+  const {setInfoValue, userInfo, submitUserInfo} = userStore;
+  const [position, setPosition] = useState([
     {id: '110000', name: '北京市', value: '北京市'},
     {id: '110101', name: '东城区', value: '东城区'},
     {},
   ]);
   const [visible, setVisible] = useState<boolean>(false);
   const [granted, setGranted] = useState<boolean>(false);
-  const [avatar, setAvatar] = useState<string>('');
-  // const [showModal,set]
   async function geoinit() {
     const res = await Geo.getCityByLocation();
     console.log(res);
@@ -76,8 +73,8 @@ const NewCustomer: React.FC = (props: any) => {
   }, []);
 
   const location = useMemo(() => {
-    return postion.map((val: any) => val?.name).join('，');
-  }, [postion]);
+    return position.map((val: any) => val?.name).join('，');
+  }, [position]);
 
   // 点击选择头像的事件
   const onClickChoosePicture = () => {
@@ -88,61 +85,84 @@ const NewCustomer: React.FC = (props: any) => {
       enableBase64: true,
       rotateEnabled: false,
     };
-    let photoData = null;
     ImagePicker.showImagePicker(options, (err, selectedPhotos) => {
       if (err) {
         console.log(err);
         return;
       }
-      setAvatar(selectedPhotos[0]?.base64);
+      setInfoValue({avatar: selectedPhotos[0]?.base64});
     });
   };
 
-  function onSubmit() {}
+  function onSubmit() {
+    if (userInfo.avatar?.trim() === '') {
+      Toast.fail({
+        content: '请上传头像',
+        duration: 3,
+        stackable: true,
+      });
+      return;
+    }
+    if (userInfo.userName?.trim() === '') {
+      Toast.fail({
+        content: '昵称不能为空',
+        duration: 3,
+        stackable: true,
+      });
+      return;
+    }
+    const newInfo = {
+      ...userInfo,
+      birthday: moment(userInfo.birthday).format('YYYY-MM-DD'),
+      position: position.map(val => val?.value),
+    };
+    console.log(userInfo);
+    submitUserInfo(newInfo);
+
+    navigation.navigate('XLayout');
+
+    // 假装上传
+  }
 
   return (
     <View style={Styles.body}>
       <StatusBar backgroundColor="transparent" translucent={true} />
       <Text style={Styles.title}>填写资料</Text>
       <Text style={Styles.title}>提升我的魅力</Text>
+
       <View style={{alignItems: 'center', marginTop: pxToDp(20)}}>
         <TouchableOpacity
           style={Styles.avatarContain}
           onPress={onClickChoosePicture}>
-          {avatar === '' ? (
+          {userInfo.avatar === '' ? (
             <View style={Styles.setAvatar}>
               <Text style={{fontSize: pxToDp(17), textAlign: 'center'}}>
                 设置头像
               </Text>
             </View>
           ) : (
-            <Image style={Styles.avatar} source={{uri: avatar}} />
+            <Image style={Styles.avatar} source={{uri: userInfo.avatar}} />
           )}
         </TouchableOpacity>
       </View>
       <View style={Styles.gender}>
         <TouchableOpacity
           style={{marginRight: pxToDp(40)}}
-          onPress={() =>
-            setMessage((message: any) => ({...message, gender: 'male'}))
-          }>
+          onPress={() => setInfoValue({gender: 'male'})}>
           <Image
             source={require('@/assets/images/MALE_ICON.png')}
             style={
-              message.gender === 'male'
+              userInfo.gender === 'male'
                 ? {...Styles.img, ...Styles.activeImg}
                 : {...Styles.img}
             }
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            setMessage((message: any) => ({...message, gender: 'female'}))
-          }>
+        <TouchableOpacity onPress={() => setInfoValue({gender: 'female'})}>
           <Image
             source={require('@/assets/images/FEMALE_ICON.png')}
             style={
-              message.gender === 'female'
+              userInfo.gender === 'female'
                 ? {...Styles.img, ...Styles.activeImg}
                 : {...Styles.img}
             }
@@ -152,9 +172,9 @@ const NewCustomer: React.FC = (props: any) => {
       <List>
         <InputItem
           clear
-          value={message.userName}
+          value={userInfo.userName}
           onChange={(value: any) => {
-            setMessage((message: any) => ({...message, userName: value}));
+            setInfoValue({userName: value});
           }}
           placeholder="请输入"
           maxLength={10}>
@@ -167,13 +187,13 @@ const NewCustomer: React.FC = (props: any) => {
             flexDirection: 'row',
             justifyContent: 'flex-start',
           }}
-          value={message.birthday}
+          value={userInfo.birthday}
           mode="date"
           defaultDate={new Date()}
           minDate={new Date(1950, 1, 1)}
           maxDate={new Date()}
           onChange={(value: any) => {
-            setMessage((message: any) => ({...message, birthday: value}));
+            setInfoValue({birthday: value});
           }}
           format="YYYY-MM-DD">
           <List.Item align="bottom" arrow="horizontal">
@@ -200,7 +220,6 @@ const NewCustomer: React.FC = (props: any) => {
           onPress={onSubmit}
         />
       </View>
-
       <Modal popup visible={visible} animationType="slide-up">
         <View style={{paddingVertical: 20, paddingHorizontal: 20}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -229,7 +248,7 @@ const NewCustomer: React.FC = (props: any) => {
               normalBgOpacity: 0,
             }}
             dataSource={options}
-            value={postion}
+            value={position}
             onceChange={arr => {
               // console.log(arr);
               setPosition(arr);
@@ -334,4 +353,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default observer(NewCustomer);
+export default React.memo(observer(NewCustomer));

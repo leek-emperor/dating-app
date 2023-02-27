@@ -43,27 +43,19 @@ function XLayout() {
 
   const renderTabBar = (props: any) => {
     return (
-      <>
-        {/* <StatusBar
-          backgroundColor="transparent"
-          translucent={false}
-          // hidden={true}
-          barStyle={'dark-content'}
-        /> */}
-        <TabBar
-          renderIcon={({route, focused, color}) => {
-            return makeIcon(route.key, focused, color);
-          }}
-          indicatorStyle={{backgroundColor: 'white'}}
-          renderLabel={({route, focused, color}) => (
-            <Text style={{color: focused ? activeColor : defaultColor}}>
-              {route.title}
-            </Text>
-          )}
-          style={{backgroundColor: '#fff'}}
-          {...props}
-        />
-      </>
+      <TabBar
+        renderIcon={({route, focused, color}) => {
+          return makeIcon(route.key, focused, color);
+        }}
+        indicatorStyle={{backgroundColor: 'white'}}
+        renderLabel={({route, focused, color}) => (
+          <Text style={{color: focused ? activeColor : defaultColor}}>
+            {route.title}
+          </Text>
+        )}
+        style={{backgroundColor: '#fff'}}
+        {...props}
+      />
     );
   };
 

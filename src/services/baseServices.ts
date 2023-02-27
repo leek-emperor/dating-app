@@ -2,7 +2,7 @@ import axios, {AxiosRequestConfig} from 'axios';
 import {Toast} from '@ant-design/react-native';
 import {getStoreData} from '../utils/anycStore.const';
 
-export const baseUrl = 'http://124.70.86.91:3007/api/v1';
+export const baseUrl = 'http://8.130.54.212:3007/api/v1';
 
 const config: AxiosRequestConfig = {
   baseURL: baseUrl,
@@ -20,7 +20,7 @@ $axios.interceptors.request.use(
     // console.log(config)
     const token = await getStoreData('token');
     if (token !== null) {
-      (config.headers as any).set('Authorization', `Bearer ${token}`);
+      (config.headers as any).set('Authorization', token);
     }
     return config;
   },
@@ -34,9 +34,9 @@ $axios.interceptors.response.use(response => {
   if (data.status == 403) {
     Toast.fail({content: '403请求失败', duration: 2});
   }
-  if (data.data.code !== 0) {
-    Toast.fail({content: data.data.msg, duration: 2});
-  }
+  // if (data.data.code !== 0) {
+  //   Toast.fail({content: data.data.msg, duration: 2});
+  // }
   return data;
 }); // axios响应拦截
 

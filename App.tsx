@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import Navigation from './src/router';
 import {observer} from 'mobx-react';
 import {AppContext, AppStore} from './src/store/index.context';
+
+
 import {Provider} from '@ant-design/react-native';
 import Geo from '@/utils/Geo';
 function App() {

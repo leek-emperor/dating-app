@@ -29,3 +29,12 @@ React Native的交友APP
 | 卡片滑动 | react-native-deck-swiper     |
 | IM服务   | ZEGO即构                     |
 
+## 后端处理
+
+主页展示暂时为数据库生成的假数据，后端使用Express
+
+
+
+## 特别鸣谢
+
+阿里云服务器提供：汪星怡

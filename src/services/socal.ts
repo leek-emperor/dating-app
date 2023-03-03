@@ -12,3 +12,7 @@ export const friendTodayBeatuy = (): Promise<CommonAxiosReponse> => {
 export const getRecommendation = (params): Promise<CommonAxiosReponse> => {
   return $axios.get('/social/recommendation', {params});
 };
+
+export const exploration = (): Promise<CommonAxiosReponse> => {
+  return $axios.get('/social/exploration');
+};

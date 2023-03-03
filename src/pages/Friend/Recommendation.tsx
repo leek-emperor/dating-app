@@ -64,8 +64,8 @@ const Recommendation = (props: Props) => {
 
       <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
         <View style={styles.overlay}>
-          <Text>筛选</Text>
-          <Text>1312</Text>
+          <Text style={{fontSize: pxToDp(30)}}>筛选</Text>
+          <Text>有什么好筛选的，反正都是假数据</Text>
         </View>
       </Overlay>
     </>
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     width: (3 * screenWidth) / 4,
     height: pxToDp(200),
     textAlign: 'center',
+    alignItems: 'center',
   },
 });
 

@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Login from '@/pages/Login';
 import XLayout from '@/pages/XLayout';
 import NewCustomer from '@/pages/NewCustomer';
+import Tan from '@/pages/Tan';
 import {observer} from 'mobx-react';
 import {useAppContext} from '@/store/index.context';
 const Stack = createNativeStackNavigator();
@@ -18,11 +19,18 @@ export default observer(function Navigation() {
     <NavigationContainer>
       <Stack.Navigator>
         {isAuth ? (
-          <Stack.Screen
-            name="XLayout"
-            component={XLayout}
-            options={{headerShown: false}}
-          />
+          <>
+            <Stack.Screen
+              name="XLayout"
+              component={XLayout}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Tan"
+              component={Tan}
+              options={{headerShown: false}}
+            />
+          </>
         ) : (
           <>
             <Stack.Screen
@@ -38,6 +46,11 @@ export default observer(function Navigation() {
             <Stack.Screen
               name="XLayout"
               component={XLayout}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Tan"
+              component={Tan}
               options={{headerShown: false}}
             />
           </>

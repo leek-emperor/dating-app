@@ -24,7 +24,6 @@ interface Props {
 
 const BeautyList: React.FC<Props> = props => {
   const {beauty} = props;
-  console.log(beauty);
   const genderColor = useMemo(
     () => (beauty.gender === 'female' ? '#FF00FF' : '#66CCFF'),
     [beauty],
@@ -34,7 +33,7 @@ const BeautyList: React.FC<Props> = props => {
     <View style={styles.container}>
       <Image style={styles.avatar} source={{uri: baseUrl + beauty.avatar}} />
       <View style={styles.abContainer}>
-        <Text style={styles.txt}>今日佳人</Text>
+        <Text style={styles.txt}>灵魂伴侣</Text>
       </View>
       <View style={styles.rightConatiner}>
         <View style={{flex: 2, paddingVertical: pxToDp(10)}}>

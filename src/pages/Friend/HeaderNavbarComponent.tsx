@@ -5,7 +5,8 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
+import {NavigationContext} from '@react-navigation/native';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {pxToDp, screenWidth} from '@/utils/styles.const';
@@ -13,9 +14,12 @@ import {pxToDp, screenWidth} from '@/utils/styles.const';
 const iconColor = '#fff';
 
 const HeaderNavbarComponent = () => {
+  const context = useContext(NavigationContext);
   return (
     <View style={styles.nav}>
-      <TouchableOpacity style={{...styles.circle, backgroundColor: '#FF3366'}}>
+      <TouchableOpacity
+        onPress={() => context?.navigate('Tan')}
+        style={{...styles.circle, backgroundColor: '#FF3366'}}>
         <Icon5 name="user-friends" size={30} color={iconColor} />
         <Text style={styles.txt}>探一探</Text>
       </TouchableOpacity>

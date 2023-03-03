@@ -23,7 +23,7 @@ interface UserInfo {
 }
 
 class userStore implements UserStore {
-  isAuth = true;
+  isAuth = false;
   userInfo: UserInfo = {
     gender: 'male',
     userName: '',
@@ -42,6 +42,8 @@ class userStore implements UserStore {
     authVerification().then(res => {
       if (res.status !== 0) {
         runInAction(() => (this.isAuth = false));
+      } else {
+        runInAction(() => (this.isAuth = true));
       }
     });
   };

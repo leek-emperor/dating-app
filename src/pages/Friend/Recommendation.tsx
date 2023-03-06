@@ -57,7 +57,7 @@ const Recommendation = (props: Props) => {
         </View>
         <View>
           {recommendList.map(val => (
-            <RecommendCard key={val.id} {...val} />
+            <RecommendCard key={val.id} goUser {...val} />
           ))}
         </View>
       </ScrollView>

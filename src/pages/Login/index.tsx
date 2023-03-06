@@ -9,7 +9,7 @@ import {validatePhone} from '@/utils/validator';
 import {userLogin, loginVerification} from '@/services/user';
 import {Toast} from '@ant-design/react-native';
 import XButton from '@/components/XButton';
-
+import {zimHooks} from '@/hooks/zim';
 import {
   CodeField,
   Cursor,
@@ -35,6 +35,8 @@ const Login: React.FC = (prop: any) => {
     value: verifyCode,
     setValue: setVerifyCode,
   });
+
+  const {login} = zimHooks();
 
   // 倒计时函数
   const countDown = useCallback(() => {
@@ -112,6 +114,7 @@ const Login: React.FC = (prop: any) => {
         loginVerification(phone, verifyCode)
           .then(res => {
             if (res.status === 0) {
+              login({userID: phone, userName: phone}); // zim登录
               AsyncStorage.setItem('token', res.data.token);
               if (res.data.newCustomer) {
                 navigation.replace('NewCustomer');

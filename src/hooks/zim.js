@@ -31,65 +31,81 @@ let scrollViewList;
 
 const zimReducer = (state, action) => {
   const _state = Object.assign({}, state);
-  if (action.type == 'login') {
-    _state.isLogin = true;
-    _state.user = {...state.user, ...action.payload};
-  } else if (action.type === 'setAvatar') {
-    const {userID, avatar} = action.payload;
-    _state.avatarMap[userID] = avatar;
-  } else if (action.type === 'updateUser') {
-    const {userID, userName} = action.payload;
-    userID && (_state.user.userID = userID);
-    userName && (_state.user.userName = userName);
-  } else if (action.type === 'setConvs') {
-    const {convs} = action.payload;
-    _state.convs = convs;
-    _state.unreadCount = convs.reduce((prev, curr) => {
-      const count =
-        curr.unreadMessageCount <= 0 || curr.notificationStatus == 2
-          ? 0
-          : curr.unreadMessageCount;
-      return prev + count;
-    }, 0);
-  } else if (action.type === 'setChat') {
-    const {messages, id} = action.payload;
-    if (!_state.chatMap[id]) _state.chatMap[id] = [];
-    if (messages.length) {
-      _state.chatMap[id].push(...messages);
-    } else {
-      _state.chatMap[id].length = 0;
-    }
-  } else if (action.type === 'setGroupList') {
-    const {groupList} = action.payload;
-    _state.groupList = groupList;
-  } else if (action.type === 'setMemberCount') {
-    const {totalMemberCount} = action.payload;
-    _state.totalMemberCount = totalMemberCount;
-  } else if (action.type === 'setUnreadCount') {
-    const {total} = action.payload;
-    _state.unreadCount = total;
-  } else if (action.type === 'clearChat') {
-    const {conversationID} = action.payload;
-    if (_state.chatMap[conversationID]) {
-      _state.chatMap[conversationID].length = 0;
-    }
-  } else if (action.type === 'setConvInfo') {
-    const {convInfo} = action.payload;
-    _state.convInfo = Object.assign({}, convInfo);
-  } else if (action.type === 'setCallID') {
-    const {callID} = action.payload;
-    _state.callID = callID;
-  } else if (action.type == 'setUserMap') {
-    const {userList} = action.payload;
-    userList.forEach(item => {
-      _state.userMap[item.baseInfo.userID] = {
-        ...item.baseInfo,
-        memberAvatarUrl: item.userAvatarUrl,
-      };
-    });
-  } else if (action.type == 'setUser') {
-    const {user} = action.payload;
-    _state.user = Object.assign(_state.user, user);
+  const type = action.type;
+  switch (type) {
+    case 'login':
+      _state.isLogin = true;
+      _state.user = {...state.user, ...action.payload};
+      break;
+    case 'setAvatar':
+      const {userID, avatar} = action.payload;
+      _state.avatarMap[userID] = avatar;
+      break;
+    case 'updateUser':
+      const {userName} = action.payload;
+      userID && (_state.user.userID = userID);
+      userName && (_state.user.userName = userName);
+      break;
+    case 'setConvs':
+      const {convs} = action.payload;
+      _state.convs = convs;
+      _state.unreadCount = convs.reduce((prev, curr) => {
+        const count =
+          curr.unreadMessageCount <= 0 || curr.notificationStatus == 2
+            ? 0
+            : curr.unreadMessageCount;
+        return prev + count;
+      }, 0);
+      break;
+    case 'setChat':
+      const {messages, id} = action.payload;
+      if (!_state.chatMap[id]) _state.chatMap[id] = [];
+      if (messages.length) {
+        _state.chatMap[id].push(...messages);
+      } else {
+        _state.chatMap[id].length = 0;
+      }
+      break;
+    case 'setGroupList':
+      const {groupList} = action.payload;
+      _state.groupList = groupList;
+      break;
+    case 'setMemberCount':
+      const {totalMemberCount} = action.payload;
+      _state.totalMemberCount = totalMemberCount;
+      break;
+    case 'setUnreadCount':
+      const {total} = action.payload;
+      _state.unreadCount = total;
+      break;
+    case 'clearChat':
+      const {conversationID} = action.payload;
+      if (_state.chatMap[conversationID]) {
+        _state.chatMap[conversationID].length = 0;
+      }
+      break;
+    case 'setConvInfo':
+      const {convInfo} = action.payload;
+      _state.convInfo = Object.assign({}, convInfo);
+      break;
+    case 'setCallID':
+      const {callID} = action.payload;
+      _state.callID = callID;
+      break;
+    case 'setUserMap':
+      const {userList} = action.payload;
+      userList.forEach(item => {
+        _state.userMap[item.baseInfo.userID] = {
+          ...item.baseInfo,
+          memberAvatarUrl: item.userAvatarUrl,
+        };
+      });
+      break;
+    case 'setUser':
+      const {user} = action.payload;
+      _state.user = Object.assign(_state.user, user);
+    default:
+      break;
   }
 
   return _state;
@@ -121,6 +137,7 @@ const zimHooks = () => {
 
   const queryUsersInfo = (ids, isSelf = false) => {
     zim.queryUsersInfo(ids, {isQueryFromServer: true}).then(({userList}) => {
+      console.log(userList);
       if (isSelf) {
         dispatch({
           type: 'setUser',
@@ -143,6 +160,7 @@ const zimHooks = () => {
     return zim
       .login(loginForm, '')
       .then(res => {
+        console.log(res);
         queryUsersInfo([loginForm.userID], true);
         return res;
       })
@@ -245,7 +263,7 @@ const zimHooks = () => {
     return zim
       .queryHistoryMessage(convID, type, config)
       .then(res => {
-        console.warn('queryHistoryMessage', res);
+        console.log('queryHistoryMessage', res);
         dispatch({type: 'clearChat', payload: {conversationID: convID}});
         setMessage(convID, res.messageList);
         return res;
@@ -374,7 +392,7 @@ const zimHooks = () => {
     return zim
       .queryGroupList()
       .then(res => {
-        console.warn('==getGroupList==', res);
+        console.log('==getGroupList==', res);
         dispatch({
           type: 'setGroupList',
           payload: {groupList: res.groupList},
@@ -550,37 +568,37 @@ const zimHooks = () => {
 
   const initEvent = () => {
     zim.on('receivePeerMessage', (zim, data) => {
-      console.warn('==receivePeerMessage==', data);
+      console.log('==receivePeerMessage==', data);
       const {messageList, fromConversationID} = data;
       setMessage(fromConversationID, messageList);
       actionScrollView();
     });
     zim.on('receiveGroupMessage', (zim, data) => {
-      console.warn('==receiveGroupMessage==', data);
+      console.log('==receiveGroupMessage==', data);
       const {messageList, fromConversationID} = data;
       setMessage(fromConversationID, messageList);
       actionScrollView();
     });
     zim.on('receiveRoomMessage', (zim, data) => {
-      console.warn('==receiveRoomMessage==', data);
+      console.log('==receiveRoomMessage==', data);
       const {messageList, fromConversationID} = data;
       setMessage(fromConversationID, messageList);
       actionScrollView();
     });
     zim.on('conversationChanged', (zim, data) => {
-      console.warn('==conversationChanged==', data);
+      console.log('==conversationChanged==', data);
       queryConversationList();
     });
     zim.on('groupNameUpdated', (zim, data) => {
-      console.warn('==groupNameUpdated==', data);
+      console.log('==groupNameUpdated==', data);
       queryConversationList();
     });
     zim.on('groupMemberStateChanged', (zim, data) => {
-      console.warn('==groupMemberStateChanged==', data);
+      console.log('==groupMemberStateChanged==', data);
       // queryGroupMemberCount(data.groupID);
     });
     zim.on('groupStateChanged', (zim, data) => {
-      console.warn('==groupStateChanged==', data);
+      console.log('==groupStateChanged==', data);
       // Invited
       if (state.isLogin && data.event == 4) {
         queryConversationList();
@@ -630,25 +648,25 @@ const zimHooks = () => {
       queryRoomOnlineMemberCount();
     });
     zim.on('callInvitationReceived', (zim, data) => {
-      console.warn('==callInvitationReceived==', data);
+      console.log('==callInvitationReceived==', data);
       // callSetID(data.callID)
       injectEvent.callInvitationReceived(data.callID, data.inviter);
     });
     zim.on('callInvitationCancelled', (zim, data) => {
-      console.warn('==callInvitationCancelled==', data);
+      console.log('==callInvitationCancelled==', data);
     });
     zim.on('callInvitationTimeout', (zim, data) => {
-      console.warn('==callInvitationTimeout==', data);
+      console.log('==callInvitationTimeout==', data);
       callClear();
     });
     zim.on('callInvitationAccepted', (zim, data) => {
-      console.warn('==callInvitationAccepted==', data);
+      console.log('==callInvitationAccepted==', data);
     });
     zim.on('callInvitationRejected', (zim, data) => {
-      console.warn('==callInvitationRejected==', data);
+      console.log('==callInvitationRejected==', data);
     });
     zim.on('callInviteesAnsweredTimeout', (zim, data) => {
-      console.warn('==callInviteesAnsweredTimeout==', data);
+      console.log('==callInviteesAnsweredTimeout==', data);
       callClear();
       injectEvent.callEventTimeout();
     });

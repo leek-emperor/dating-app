@@ -1,12 +1,14 @@
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useMemo} from 'react';
+import React, {useContext, useMemo} from 'react';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import IconA from 'react-native-vector-icons/AntDesign';
 import {baseUrl} from '@/services/baseServices';
 import {pxToDp, screenWidth} from '@/utils/styles.const';
 import {diffTime} from '@/utils/count.const';
-
+import {NavigationContext} from '@react-navigation/native';
 interface Props {
+  id: string;
+  phone: string;
   avatar: string;
   gender: string;
   birthday: string;
@@ -14,17 +16,42 @@ interface Props {
   education: string;
   fateValue: number;
   userName: string;
+  goUser?: () => void;
 }
 
 const RecommendCard = (props: Props) => {
-  const {avatar, gender, birthday, marry, education, fateValue, userName} =
-    props;
+  const {
+    id,
+    avatar,
+    gender,
+    birthday,
+    marry,
+    education,
+    fateValue,
+    userName,
+    phone,
+    goUser,
+  } = props;
   const genderColor = useMemo(
     () => (gender === 'female' ? '#FF00FF' : '#66CCFF'),
     [gender],
   );
+  const context = useContext(NavigationContext);
+  const toUserPage = () => {
+    context?.navigate('UserPage', {
+      id,
+      avatar,
+      gender,
+      birthday,
+      marry,
+      education,
+      fateValue,
+      userName,
+      phone,
+    });
+  };
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={goUser && toUserPage}>
       <View style={styles.container}>
         <Image style={styles.avatar} source={{uri: baseUrl + avatar}} />
         <View style={styles.middle}>

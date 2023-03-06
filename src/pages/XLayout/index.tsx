@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, useWindowDimensions} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import {observer} from 'mobx-react';
@@ -8,8 +8,7 @@ import Message from '../Message';
 import Group from '../Group';
 import makeIcon, {activeColor, defaultColor} from './IconMap';
 import {StatusBar} from 'react-native';
-import {pinkType} from '@/utils/color.const';
-import {pxToDp} from '@/utils/styles.const';
+import {useZIM} from '@/hooks/zim';
 
 const renderScene = SceneMap({
   Friend,
@@ -20,7 +19,10 @@ const renderScene = SceneMap({
 
 function XLayout() {
   const layout = useWindowDimensions();
-
+  const [{callID}, zimAction] = useZIM();
+  useEffect(() => {
+    zimAction.initEvent();
+  }, []);
   const [index, setIndex] = useState<number>(0);
   const [routes] = useState([
     {

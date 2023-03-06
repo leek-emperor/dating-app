@@ -116,7 +116,6 @@ const NewCustomer: React.FC = (props: any) => {
       birthday: moment(userInfo.birthday).format('YYYY-MM-DD'),
       position: position.map(val => val?.value),
     };
-    console.log(userInfo);
     submitUserInfo(newInfo);
 
     navigation.navigate('XLayout');

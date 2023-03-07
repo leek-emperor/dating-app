@@ -3,7 +3,7 @@ import React, {useLayoutEffect, useState} from 'react';
 import {AnimatedScrollView} from '@kanelloc/react-native-animated-header-scroll-view';
 import HeaderNavbarComponent from './HeaderNavbarComponent';
 import {pxToDp} from '@/utils/styles.const';
-import Vistors, {Vistor} from '@/components/Vistors';
+import Vistors from '@/components/Vistors';
 import {
   friendVistors,
   friendTodayBeatuy,

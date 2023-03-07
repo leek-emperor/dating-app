@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {Input, Button} from '@rneui/base';
 import {StyleSheet, View, FlatList, StatusBar} from 'react-native';
-import {useZIM} from '../../hooks/zim';
+import {useZIM} from '@/hooks/zim';
 import {pxToDp} from '@/utils/styles.const';
 import {useAppContext} from '@/store/index.context';
 import MessageItem from './MessageItem';
@@ -10,6 +10,8 @@ import {observer} from 'mobx-react';
 const Chat = ({navigation, route}: any) => {
   const {id, type, name, avatar} = route.params;
   const {userStore} = useAppContext();
+  const {userInfo} = userStore;
+  const myAvatar = userInfo.avatar;
   console.log(id, type, name);
   const [isByte, setIsByte] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -42,7 +44,7 @@ const Chat = ({navigation, route}: any) => {
     setInputText('');
     zimAction.sendChatMessage(type, msg, id, isByte).then(() => {
       setTimeout(() => {
-        (flatList?.current as any).scrollToEnd();
+        (flatList?.current as any)?.scrollToEnd();
       }, 200);
     });
   };
@@ -50,13 +52,14 @@ const Chat = ({navigation, route}: any) => {
     <View style={styles.contain}>
       <StatusBar backgroundColor="transparent" translucent={true} />
       <FlatList
+        style={styles.flat}
         ref={flatList}
         data={msgs}
         renderItem={(props: any) => {
           console.log(props);
-          const {index, item} = props;
+          const {item} = props;
           const isMe = item.direction === 0;
-          const currAvatar = isMe ? avatar : avatar;
+          const currAvatar = isMe ? myAvatar : avatar;
           return (
             <MessageItem
               key={
@@ -65,7 +68,7 @@ const Chat = ({navigation, route}: any) => {
                   : props.item.localMessageID
               }
               currAvatar={currAvatar}
-              {...props}
+              item={item}
             />
           );
         }}
@@ -94,6 +97,10 @@ const styles = StyleSheet.create({
   contain: {
     flex: 1,
     zIndex: 600,
+  },
+  flat: {
+    paddingTop: pxToDp(10),
+    paddingBottom: pxToDp(5),
   },
   converse: {
     flex: 1,

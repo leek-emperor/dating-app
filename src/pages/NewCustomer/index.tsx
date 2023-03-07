@@ -26,6 +26,10 @@ import ImagePicker from 'react-native-syan-image-picker';
 import XButton from '@/components/XButton';
 import {Toast} from '@ant-design/react-native';
 import moment from 'moment';
+import {ButtonGroup, Divider} from '@rneui/themed';
+
+const educationList = ['高中', '大专', '本科', '硕士', '博士'];
+const emotionList = ['单身', '已婚'];
 
 const NewCustomer: React.FC = (props: any) => {
   const {navigation} = props;
@@ -38,6 +42,9 @@ const NewCustomer: React.FC = (props: any) => {
   ]);
   const [visible, setVisible] = useState<boolean>(false);
   const [granted, setGranted] = useState<boolean>(false);
+  const [emotionIndex, setEmotionIndex] = useState(0);
+  const [educationIndex, setEducationIndex] = useState(0);
+
   async function geoinit() {
     const res = await Geo.getCityByLocation();
     console.log(res);
@@ -118,9 +125,7 @@ const NewCustomer: React.FC = (props: any) => {
     };
     submitUserInfo(newInfo);
 
-    navigation.navigate('XLayout');
-
-    // 假装上传
+    navigation.navigate('StartPage');
   }
 
   return (
@@ -145,6 +150,15 @@ const NewCustomer: React.FC = (props: any) => {
         </TouchableOpacity>
       </View>
       <View style={Styles.gender}>
+        <Text
+          style={{
+            fontSize: pxToDp(16),
+            color: '#000',
+            position: 'absolute',
+            left: pxToDp(14),
+          }}>
+          性别
+        </Text>
         <TouchableOpacity
           style={{marginRight: pxToDp(40)}}
           onPress={() => setInfoValue({gender: 'male'})}>
@@ -168,6 +182,7 @@ const NewCustomer: React.FC = (props: any) => {
           />
         </TouchableOpacity>
       </View>
+      <Divider />
       <List>
         <InputItem
           clear
@@ -200,6 +215,69 @@ const NewCustomer: React.FC = (props: any) => {
           </List.Item>
         </DatePicker>
       </List>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          position: 'relative',
+        }}>
+        <Text
+          style={{
+            fontSize: pxToDp(16),
+            color: '#000',
+            position: 'absolute',
+            left: pxToDp(14),
+          }}>
+          情感
+        </Text>
+        <ButtonGroup
+          buttons={emotionList}
+          selectedIndex={emotionIndex}
+          onPress={value => {
+            setEmotionIndex(value);
+          }}
+          containerStyle={{
+            width: screenWidth / 2,
+            // marginBottom: 20,
+            borderRadius: pxToDp(10),
+          }}
+          selectedButtonStyle={{backgroundColor: '#F75D59'}}
+          selectedTextStyle={{color: '#000'}}
+        />
+      </View>
+      <Divider />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          position: 'relative',
+        }}>
+        <Text
+          style={{
+            fontSize: pxToDp(16),
+            color: '#000',
+            position: 'absolute',
+            left: pxToDp(14),
+          }}>
+          学历
+        </Text>
+        <ButtonGroup
+          buttons={educationList}
+          selectedIndex={educationIndex}
+          onPress={value => {
+            setEducationIndex(value);
+          }}
+          containerStyle={{
+            width: (2 * screenWidth) / 3,
+            borderRadius: pxToDp(10),
+          }}
+          selectedButtonStyle={{backgroundColor: '#F75D59'}}
+          selectedTextStyle={{color: '#000'}}
+        />
+      </View>
+      <Divider />
       <Button
         style={{
           borderWidth: 0,
@@ -274,13 +352,16 @@ const Styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   gender: {
+    position: 'relative',
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: pxToDp(40),
+    marginTop: pxToDp(40),
+    marginBottom: pxToDp(10),
   },
   img: {
-    width: pxToDp(100),
-    height: pxToDp(100),
+    width: pxToDp(50),
+    height: pxToDp(50),
     borderRadius: pxToDp(50),
   },
   activeImg: {

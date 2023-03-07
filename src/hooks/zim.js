@@ -1,7 +1,7 @@
 import React, {useReducer, createContext, useContext} from 'react';
 import ZIM from 'zego-zim-react-native';
 import Toast from 'react-native-toast-message';
-import {appConfig, avatarPrefix} from '../utils/zim';
+import {appConfig, avatarPrefix} from '@/utils/zim';
 
 ZIM.create(appConfig);
 const zim = ZIM.getInstance();

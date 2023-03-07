@@ -5,13 +5,14 @@ import {makeAutoObservable, runInAction} from 'mobx';
 
 interface UserStore {
   userInfo: UserInfo;
-  isAuth: boolean;
+  authStatus: number; // 1直接去主页，2信息未完善，3没有权限
   getAuth: () => void;
   setInfoValue: (addValue: object) => void;
   submitUserInfo: (newInfo: object) => void;
 }
 
 interface UserInfo {
+  id: string;
   gender: string;
   userName: string;
   birthday: Date;
@@ -23,7 +24,7 @@ interface UserInfo {
 }
 
 class userStore implements UserStore {
-  isAuth = false;
+  authStatus = 1;
   userInfo: UserInfo = {
     gender: 'male',
     userName: '',
@@ -33,6 +34,7 @@ class userStore implements UserStore {
     lng: '', // 经度
     lat: '', //维度
     address: '', // 详细地址
+    id: '',
   };
   constructor() {
     makeAutoObservable(this);
@@ -40,10 +42,17 @@ class userStore implements UserStore {
 
   getAuth = () => {
     authVerification().then(res => {
-      if (res.status !== 0) {
-        runInAction(() => (this.isAuth = false));
+      if (res.status === 0) {
+        runInAction(() => {
+          this.authStatus = 1;
+          this.userInfo = {...this.userInfo, ...res.data};
+        });
+        return;
+      }
+      if (res.msg === '信息未完善') {
+        runInAction(() => (this.authStatus = 2));
       } else {
-        runInAction(() => (this.isAuth = true));
+        runInAction(() => (this.authStatus = 3));
       }
     });
   };

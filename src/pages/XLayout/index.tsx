@@ -9,6 +9,7 @@ import Group from '../Group';
 import makeIcon, {activeColor, defaultColor} from './IconMap';
 import {StatusBar} from 'react-native';
 import {useZIM} from '@/hooks/zim';
+import {useAppContext} from '@/store/index.context';
 
 const renderScene = SceneMap({
   Friend,
@@ -18,10 +19,13 @@ const renderScene = SceneMap({
 });
 
 function XLayout() {
+  const {userStore} = useAppContext();
+  const {userInfo} = userStore;
   const layout = useWindowDimensions();
   const [{callID}, zimAction] = useZIM();
   useEffect(() => {
     zimAction.initEvent();
+    zimAction.login({userID: userInfo.id, userName: userInfo.id});
   }, []);
   const [index, setIndex] = useState<number>(0);
   const [routes] = useState([

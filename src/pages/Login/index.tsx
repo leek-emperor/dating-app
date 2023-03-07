@@ -9,7 +9,7 @@ import {validatePhone} from '@/utils/validator';
 import {userLogin, loginVerification} from '@/services/user';
 import {Toast} from '@ant-design/react-native';
 import XButton from '@/components/XButton';
-import {zimHooks} from '@/hooks/zim';
+// import {zimHooks} from '@/hooks/zim';
 import {
   CodeField,
   Cursor,
@@ -17,11 +17,14 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import {observer} from 'mobx-react';
+import {useAppContext} from '@/store/index.context';
 
 const CELL_COUNT = 6;
 
 const Login: React.FC = (prop: any) => {
   const {navigation} = prop;
+  const {userStore} = useAppContext();
+  const {setInfoValue} = userStore;
   const [phone, setPhone] = useState<string>(''); // 手机号
   const [typeErr, setTypeErr] = useState<boolean>(false); // 手机号是否正确
   const [sendType, setSendType] = useState<boolean>(false); // 验证码是否发送（验证码页面是否渲染）
@@ -36,7 +39,7 @@ const Login: React.FC = (prop: any) => {
     setValue: setVerifyCode,
   });
 
-  const {login} = zimHooks();
+  // const {login} = zimHooks();
 
   // 倒计时函数
   const countDown = useCallback(() => {
@@ -114,11 +117,13 @@ const Login: React.FC = (prop: any) => {
         loginVerification(phone, verifyCode)
           .then(res => {
             if (res.status === 0) {
-              login({userID: phone, userName: phone}); // zim登录
+              // login({userID: phone, userName: phone}); // zim登录
               AsyncStorage.setItem('token', res.data.token);
               if (res.data.newCustomer) {
                 navigation.replace('NewCustomer');
               } else {
+                const {id, gender, avatar, userName} = res.data.userInfo;
+                setInfoValue({id, gender, avatar, userName});
                 navigation.replace('XLayout');
               }
             }

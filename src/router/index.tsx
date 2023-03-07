@@ -15,21 +15,22 @@ export default observer(function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
-          name="StartPage"
-          component={StartPage}
-          options={{headerShown: false, animationTypeForReplace: 'pop'}}
-        /> */}
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{headerShown: false, animationTypeForReplace: 'pop'}}
-        />
         <Stack.Screen
           name="NewCustomer"
           component={NewCustomer}
           options={{headerShown: false, animationTypeForReplace: 'pop'}}
         />
+        <Stack.Screen
+          name="StartPage"
+          component={StartPage}
+          options={{headerShown: false, animationTypeForReplace: 'pop'}}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{headerShown: false, animationTypeForReplace: 'pop'}}
+        />
+
         <Stack.Screen
           name="XLayout"
           component={XLayout}

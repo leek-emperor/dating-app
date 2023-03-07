@@ -6,15 +6,21 @@ import {pxToDp, screenHeight} from '@/utils/styles.const';
 const StartPage = (prop: any) => {
   const {navigation} = prop;
   const {userStore} = useAppContext();
-  const {getAuth, isAuth} = userStore;
+  const {getAuth, authStatus} = userStore;
   let timer: any;
   useEffect(() => {
     getAuth();
     timer = setTimeout(() => {
-      if (isAuth) {
-        navigation.replace('Login');
-      } else {
-        navigation.replace('XLayout');
+      switch (authStatus) {
+        case 1:
+          navigation.replace('XLayout');
+          break;
+        case 2:
+          navigation.replace('NewCustomer');
+          break;
+        default:
+          navigation.replace('Login');
+          break;
       }
       return () => clearTimeout(timer);
     }, 2000);

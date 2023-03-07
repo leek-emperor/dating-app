@@ -2,6 +2,7 @@ import {View, Text} from 'react-native';
 import {Button} from '@rneui/themed';
 import React from 'react';
 import {useRoute} from '@react-navigation/native';
+import {observer} from 'mobx-react';
 
 interface ChatParams {
   type: 0 | 1 | 2; // 私聊会话、房间会话、群聊会话
@@ -13,9 +14,9 @@ interface ChatParams {
 const UserPage = (props: any) => {
   const {navigation} = props;
   const route = useRoute();
-  const {phone, userName, avatar}: any = route.params;
+  const {id, userName, avatar}: any = route.params;
   console.log(route.params);
-  const params: ChatParams = {type: 0, id: phone, name: userName, avatar};
+  const params: ChatParams = {type: 0, id, name: userName, avatar};
   return (
     <View>
       <Text>UserPage</Text>
@@ -29,4 +30,4 @@ const UserPage = (props: any) => {
   );
 };
 
-export default UserPage;
+export default React.memo(observer(UserPage));

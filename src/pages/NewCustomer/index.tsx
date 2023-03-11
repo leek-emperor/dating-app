@@ -122,10 +122,13 @@ const NewCustomer: React.FC = (props: any) => {
       ...userInfo,
       birthday: moment(userInfo.birthday).format('YYYY-MM-DD'),
       position: position.map(val => val?.value),
+      marry: emotionList[emotionIndex],
+      education: educationList[educationIndex],
     };
-    submitUserInfo(newInfo);
-
-    navigation.navigate('StartPage');
+    submitUserInfo(newInfo).then((res: any) => {
+      console.log(res);
+      navigation.navigate('StartPage');
+    });
   }
 
   return (

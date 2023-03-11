@@ -16,3 +16,7 @@ export const getRecommendation = (params): Promise<CommonAxiosReponse> => {
 export const exploration = (): Promise<CommonAxiosReponse> => {
   return $axios.get('/social/exploration');
 };
+
+export const getInfo = (params: any): Promise<CommonAxiosReponse> => {
+  return $axios.get('/social/getInfo', {params});
+};

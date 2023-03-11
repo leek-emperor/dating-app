@@ -25,7 +25,7 @@ function XLayout() {
   const [{callID}, zimAction] = useZIM();
   useEffect(() => {
     zimAction.initEvent();
-    zimAction.login({userID: userInfo.id, userName: userInfo.id});
+    zimAction.login({userID: userInfo.id, userName: userInfo.userName});
   }, []);
   const [index, setIndex] = useState<number>(0);
   const [routes] = useState([

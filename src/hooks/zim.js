@@ -137,7 +137,6 @@ const zimHooks = () => {
 
   const queryUsersInfo = (ids, isSelf = false) => {
     zim.queryUsersInfo(ids, {isQueryFromServer: true}).then(({userList}) => {
-      console.log(userList);
       if (isSelf) {
         dispatch({
           type: 'setUser',
@@ -160,7 +159,6 @@ const zimHooks = () => {
     return zim
       .login(loginForm, '')
       .then(res => {
-        console.log(res);
         queryUsersInfo([loginForm.userID], true);
         return res;
       })
@@ -236,7 +234,7 @@ const zimHooks = () => {
           if (!item.type) ids.push(item.conversationID);
         });
         setAvatarMap(ids);
-        return res;
+        return res.conversationList;
       })
       .catch(errorHandle);
   };

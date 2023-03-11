@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: pxToDp(15),
     paddingVertical: pxToDp(4),
     alignItems: 'center',
+    marginBottom: pxToDp(2),
   },
   messageBox: {
     paddingHorizontal: pxToDp(10),

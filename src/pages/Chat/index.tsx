@@ -25,7 +25,7 @@ const Chat = ({navigation, route}: any) => {
       .queryHistoryMessage(id, type, {count: 1000, reverse: true})
       .then(res => {
         setTimeout(() => {
-          (flatList.current as any).scrollToEnd();
+          (flatList.current as any)?.scrollToEnd();
         }, 300);
       });
 
@@ -53,6 +53,7 @@ const Chat = ({navigation, route}: any) => {
       <StatusBar backgroundColor="transparent" translucent={true} />
       <FlatList
         style={styles.flat}
+        contentContainerStyle={{paddingBottom: pxToDp(10)}}
         ref={flatList}
         data={msgs}
         renderItem={(props: any) => {
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   },
   flat: {
     paddingTop: pxToDp(10),
-    paddingBottom: pxToDp(5),
+    // paddingBottom: pxToDp(100),
   },
   converse: {
     flex: 1,

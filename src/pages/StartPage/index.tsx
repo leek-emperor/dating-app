@@ -2,28 +2,18 @@ import {View, Text, Image} from 'react-native';
 import React, {useEffect} from 'react';
 import {useAppContext} from '@/store/index.context';
 import {pxToDp, screenHeight} from '@/utils/styles.const';
+import {observer} from 'mobx-react';
+
+const authMap = ['XLayout', 'NewCustomer', 'Login'];
 
 const StartPage = (prop: any) => {
   const {navigation} = prop;
   const {userStore} = useAppContext();
-  const {getAuth, authStatus} = userStore;
-  let timer: any;
+  const {getAuth} = userStore;
   useEffect(() => {
-    getAuth();
-    timer = setTimeout(() => {
-      switch (authStatus) {
-        case 1:
-          navigation.replace('XLayout');
-          break;
-        case 2:
-          navigation.replace('NewCustomer');
-          break;
-        default:
-          navigation.replace('Login');
-          break;
-      }
-      return () => clearTimeout(timer);
-    }, 2000);
+    getAuth().then((res: number) => {
+      navigation.replace(authMap[res]);
+    });
   });
   return (
     <View
@@ -43,4 +33,4 @@ const StartPage = (prop: any) => {
   );
 };
 
-export default StartPage;
+export default observer(StartPage);

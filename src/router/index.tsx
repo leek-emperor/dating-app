@@ -16,11 +16,6 @@ export default observer(function Navigation() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="NewCustomer"
-          component={NewCustomer}
-          options={{headerShown: false, animationTypeForReplace: 'pop'}}
-        />
-        <Stack.Screen
           name="StartPage"
           component={StartPage}
           options={{headerShown: false, animationTypeForReplace: 'pop'}}
@@ -30,7 +25,11 @@ export default observer(function Navigation() {
           component={Login}
           options={{headerShown: false, animationTypeForReplace: 'pop'}}
         />
-
+        <Stack.Screen
+          name="NewCustomer"
+          component={NewCustomer}
+          options={{headerShown: false, animationTypeForReplace: 'pop'}}
+        />
         <Stack.Screen
           name="XLayout"
           component={XLayout}

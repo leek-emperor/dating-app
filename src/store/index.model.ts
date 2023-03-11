@@ -5,7 +5,7 @@ import {makeAutoObservable, runInAction} from 'mobx';
 
 interface UserStore {
   userInfo: UserInfo;
-  authStatus: number; // 1直接去主页，2信息未完善，3没有权限
+  authStatus: number; // 0直接去主页，1信息未完善，2没有权限
   getAuth: () => void;
   setInfoValue: (addValue: object) => void;
   submitUserInfo: (newInfo: object) => void;
@@ -41,20 +41,26 @@ class userStore implements UserStore {
   }
 
   getAuth = () => {
-    authVerification().then(res => {
-      if (res.status === 0) {
-        runInAction(() => {
-          this.authStatus = 1;
-          this.userInfo = {...this.userInfo, ...res.data};
-        });
-        return;
-      }
-      if (res.msg === '信息未完善') {
-        runInAction(() => (this.authStatus = 2));
-      } else {
-        runInAction(() => (this.authStatus = 3));
-      }
-    });
+    return authVerification()
+      .then(res => {
+        if (res.status === 0) {
+          runInAction(() => {
+            this.authStatus = 0;
+            this.userInfo = {...this.userInfo, ...res.data};
+          });
+          return;
+        }
+        if (res.msg === '信息未完善') {
+          runInAction(() => (this.authStatus = 1));
+          return;
+        } else {
+          runInAction(() => (this.authStatus = 2));
+          return;
+        }
+      })
+      .then(() => {
+        return this.authStatus;
+      });
   };
 
   setInfoValue = (addValue: object) => {
@@ -62,7 +68,7 @@ class userStore implements UserStore {
   };
 
   submitUserInfo = (newInfo: object) => {
-    setUserInfo(newInfo).then(res => console.log(res));
+    return setUserInfo(newInfo);
   };
 }
 

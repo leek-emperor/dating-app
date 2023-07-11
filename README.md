@@ -1,4 +1,4 @@
-# dating-app
+# dating-app（旧版，新版Private）
 
 React Native 的交友 APP
 
